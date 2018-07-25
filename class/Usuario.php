@@ -39,6 +39,11 @@ class Usuario{
 		$this->dtCadastro = $dtCadastro;
 	}
 
+	public function __construct($login = "",$password = ""){
+		$this->desUsuario = $login;
+		$this->desSenha = $password;
+	}
+
 	public function loadById($id){
 		$sql = new Sql();
 
@@ -47,12 +52,7 @@ class Usuario{
 		));
 
 		if(count($results) > 0){
-			$row = $results[0];
-
-			$this->setIdUsuario($row['idusuario']);
-			$this->setDesUsuario($row['desusuario']);
-			$this->setDesSenha($row['dessenha']);
-			$this->setDtCadastro(new DateTime($row['dtcadastro']));
+			$this->setData($results[0]);
 		}
 	}
 
@@ -75,16 +75,45 @@ class Usuario{
 		$results = $sql->select("SELECT * FROM tb_usuarios WHERE desusuario = :LOGIN AND dessenha = :PASS ORDER BY desusuario",array(":LOGIN"=>$login,":PASS"=>$password));
 
 		if(count($results) > 0){
-			$row = $results[0];
-
-			$this->setIdUsuario($row['idusuario']);
-			$this->setDesUsuario($row['desusuario']);
-			$this->setDesSenha($row['dessenha']);
-			$this->setDtCadastro(new DateTime($row['dtcadastro']));
+			$this->setData($results[0]);
+		
 		} else{
 			throw new Exception("Login e/ou senha inválidos");
 			
 		}
+	}
+
+	public function setData($data){
+		$this->setIdUsuario($data['idusuario']);
+		$this->setDesUsuario($data['desusuario']);
+		$this->setDesSenha($data['dessenha']);
+		$this->setDtCadastro(new DateTime($data['dtcadastro']));
+	}
+
+	public function insert(){
+		$sql = new Sql();
+
+		$results  = $sql->select("CALL sp_usuarios_insert(:LOGIN, :PASSWORD)",array(
+			':LOGIN'=>$this->getDesUsuario(),
+			':PASSWORD'=>$this->getDesSenha()
+		));
+
+		if(count($results) > 0){
+			$this->setData($results[0]);
+		}
+	}
+
+	public function update($login,$senha){
+		$this->setDesUsuario($login);
+		$this->setDesSenha($senha);
+
+		$sql = new Sql();
+
+		$sql->query("UPDATE tb_usuarios SET desusuario = :LOGIN, dessenha = :SENHA WHERE idusuario  = :ID" ,array(
+			':LOGIN'=>$this->getDesUsuario(),
+			':SENHA'=>$this->getDesSenha(),
+			':ID'=>$this->getIdUsuario()
+		));
 	}
 
 	public function __toString(){
@@ -97,4 +126,5 @@ class Usuario{
 	}
 
 }
+
 ?>

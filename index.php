@@ -22,6 +22,21 @@ require_once("config.php");
 
 // Carrega um usuario autenticado
 
-$usuario = new Usuario();
-$usuario->login("eric","123");
-echo $usuario;
+//$usuario = new Usuario();
+//$usuario->login("eric","123");
+//echo $usuario;
+
+// $aluno = new Usuario("usuario","senha");
+
+// $aluno->insert();
+
+// echo $aluno;
+
+$aluno = new Usuario();
+
+$aluno->loadById(8);
+
+$aluno->update("teache","WDLZD?P6Bb5GS2%Ylb");
+
+echo $aluno;
+?>
