@@ -32,11 +32,19 @@ require_once("config.php");
 
 // echo $aluno;
 
+// $aluno = new Usuario();
+
+// $aluno->loadById(8);
+
+// $aluno->update("teache","WDLZD?P6Bb5GS2%Ylb");
+
+// echo $aluno;
+
 $aluno = new Usuario();
 
-$aluno->loadById(8);
+$aluno->loadById(6);
 
-$aluno->update("teache","WDLZD?P6Bb5GS2%Ylb");
+$aluno->delete();
 
 echo $aluno;
 ?>
